@@ -10,13 +10,24 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
-CORS(app, origins=["http://localhost:5173", "http://127.0.0.1:5173"])
+default_origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
+configured_origins = [
+    origin.strip().rstrip("/")
+    for origin in os.environ.get("CORS_ORIGINS", "").split(",")
+    if origin.strip()
+]
+CORS(app, origins=configured_origins or default_origins)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FACES_DIR = os.path.join(BASE_DIR, "faces")
+FACES_DIR = os.environ.get("FACES_DIR", os.path.join(BASE_DIR, "faces"))
 FACE_SIZE = (200, 200)
 USN_PATTERN = re.compile(r"^[A-Za-z0-9_-]{1,32}$")
 _trained_model = None
+
+
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"})
 
 
 def decode_image(data):
@@ -157,4 +168,4 @@ def recognize():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5000")))

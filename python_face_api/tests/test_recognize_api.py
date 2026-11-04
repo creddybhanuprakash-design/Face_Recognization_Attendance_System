@@ -8,6 +8,12 @@ class FaceApiValidationTests(unittest.TestCase):
         app.config["TESTING"] = True
         self.client = app.test_client()
 
+    def test_health_endpoint(self):
+        response = self.client.get("/health")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get_json(), {"status": "ok"})
+
     def test_enrollment_rejects_path_like_usn(self):
         response = self.client.post(
             "/enroll",

@@ -3,6 +3,12 @@
 A local attendance application with a React/Vite frontend, an Express and MongoDB
 backend, and a Flask/OpenCV face-recognition service.
 
+live Link: https://attendance-system-six-tan.vercel.app/
+
+
+Server link: https://face-recognization-attendance-system-5ho5.onrender.com
+
+
 ## What it does
 
 - Register administrators and sign in to protected management pages.
