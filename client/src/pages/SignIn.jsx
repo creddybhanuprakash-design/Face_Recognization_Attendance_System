@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaUserShield, FaLock, FaEnvelope, FaUser, FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from "../utils/apiConfig";
 
 const Signin = () => {
   const [authMode, setAuthMode] = useState("login");
@@ -18,7 +19,7 @@ const Signin = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/api/admin/signup", {
+      const response = await fetch(`${API_BASE_URL}/api/admin/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
@@ -40,7 +41,7 @@ const Signin = () => {
   const handleSignin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5001/api/admin/signin", {
+      const response = await fetch(`${API_BASE_URL}/api/admin/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

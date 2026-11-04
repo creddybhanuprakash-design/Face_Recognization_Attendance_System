@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaUserCircle, FaCheckCircle, FaExclamationCircle, FaThList, FaClock } from "react-icons/fa";
 import { formatDateTime } from "../utils/formatDate";
+import { API_BASE_URL, FACE_API_URL } from "../utils/apiConfig";
 
 const Front = () => {
   const [recognizedName, setRecognizedName] = useState("");
@@ -21,7 +22,7 @@ const Front = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/api/students");
+        const response = await axios.get(`${API_BASE_URL}/api/students`);
         setStudents(response.data);
       } catch (err) {
         console.error("Error fetching students:", err);
@@ -116,7 +117,7 @@ const Front = () => {
       const imageData = canvas.toDataURL("image/jpeg", 0.8);
 
       // 2. Call Python Recognition API
-      const { data } = await axios.post("http://localhost:5000/recognize", { image: imageData });
+      const { data } = await axios.post(`${FACE_API_URL}/recognize`, { image: imageData });
       const currentUsn = data.usn; // Use a distinct local variable name
 
       if (!currentUsn || currentUsn === "Unknown" || currentUsn === "No face detected") {
@@ -144,7 +145,7 @@ const Front = () => {
 
       // 5. Log Attendance using the LOCAL variables to guarantee consistency
       try {
-        const res = await axios.post("http://localhost:5001/api/periodwise-attendance", {
+        const res = await axios.post(`${API_BASE_URL}/api/periodwise-attendance`, {
           usn: studentMatch.usn,
           recognizedAt: new Date().toISOString()
         });

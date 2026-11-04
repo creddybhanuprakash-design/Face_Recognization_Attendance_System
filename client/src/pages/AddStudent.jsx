@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AdminProfile from "../components/AdminProfile";
 import { getAuthorizationHeader } from "../utils/authStorage";
+import { API_BASE_URL, FACE_API_URL } from "../utils/apiConfig";
 
 const Addstudent = () => {
   const navigate = useNavigate();
@@ -121,7 +122,7 @@ const Addstudent = () => {
 
     try {
       // 1. Enroll Face in Python API
-      const pythonRes = await fetch("http://localhost:5000/enroll", {
+      const pythonRes = await fetch(`${FACE_API_URL}/enroll`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ usn: student.usn, image: imageData }),
@@ -130,7 +131,7 @@ const Addstudent = () => {
       if (!pythonRes.ok) throw new Error("Python API enrollment failed");
 
       // 2. Save Student Data in Node Backend
-      const nodeRes = await fetch("http://localhost:5001/api/students", {
+      const nodeRes = await fetch(`${API_BASE_URL}/api/students`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { formatDateTime } from "../utils/formatDate";
 import AdminProfile from "../components/AdminProfile";
 import { getAuthorizationHeader } from "../utils/authStorage";
+import { API_BASE_URL } from "../utils/apiConfig";
 
 const Period = () => {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ const Period = () => {
         finalTimestamp = new Date(manualForm.recognizedAt).toISOString();
       }
 
-      const res = await axios.post("http://localhost:5001/api/periodwise-attendance", {
+      const res = await axios.post(`${API_BASE_URL}/api/periodwise-attendance`, {
         usn: manualForm.usn,
         period: manualForm.period,
         subject: selectedPeriodData?.subject || "---",
@@ -111,7 +112,7 @@ const Period = () => {
 
   const fetchAttendanceData = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/api/periodwise-attendance");
+      const response = await axios.get(`${API_BASE_URL}/api/periodwise-attendance`);
       setAttendanceData(response.data);
     } catch (error) {
       console.error("Error fetching attendance data:", error);
@@ -155,7 +156,7 @@ const Period = () => {
   const downloadPeriodReport = async () => {
     try {
       const periodParam = filter === "All" ? "" : `&period=${filter}`;
-      const response = await fetch(`http://localhost:5001/api/report/period-excel?date=${reportDate}${periodParam}`, {
+      const response = await fetch(`${API_BASE_URL}/api/report/period-excel?date=${reportDate}${periodParam}`, {
         headers: { Authorization: getAuthorizationHeader() }
       });
       if (!response.ok) throw new Error("Report download failed");

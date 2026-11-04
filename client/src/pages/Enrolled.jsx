@@ -6,6 +6,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatDateOnly } from "../utils/formatDate";
 import AdminProfile from "../components/AdminProfile";
+import { API_BASE_URL, FACE_API_URL } from "../utils/apiConfig";
 
 const Enrolled = () => {
   const navigate = useNavigate();
@@ -29,8 +30,8 @@ const Enrolled = () => {
   const fetchData = async () => {
     try {
       const [studentsRes, attendanceRes] = await Promise.all([
-        axios.get('http://localhost:5001/api/students'),
-        axios.get('http://localhost:5001/api/students/attendance'),
+        axios.get(`${API_BASE_URL}/api/students`),
+        axios.get(`${API_BASE_URL}/api/students/attendance`),
       ]);
       setStudents(studentsRes.data);
       setAttendanceLogs(attendanceRes.data);
@@ -48,7 +49,7 @@ const Enrolled = () => {
   const handleDelete = async (usn) => {
     if (!window.confirm(`Are you sure you want to delete student ${usn}?`)) return;
     try {
-      await axios.delete(`http://localhost:5001/api/students/${usn}`);
+      await axios.delete(`${API_BASE_URL}/api/students/${usn}`);
       alert("Student deleted successfully");
       fetchData();
       setSelectedStudent(null);
@@ -60,7 +61,7 @@ const Enrolled = () => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5001/api/students/${selectedStudent.usn}`, editForm);
+      await axios.put(`${API_BASE_URL}/api/students/${selectedStudent.usn}`, editForm);
       alert("Student updated successfully");
       setIsEditing(false);
       fetchData();
@@ -142,7 +143,7 @@ const Enrolled = () => {
     const imageData = canvas.toDataURL("image/jpeg", 0.9);
 
     try {
-      await axios.post("http://localhost:5000/enroll", {
+      await axios.post(`${FACE_API_URL}/enroll`, {
         usn: selectedStudent.usn,
         image: imageData
       });

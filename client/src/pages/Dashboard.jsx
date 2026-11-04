@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { formatDateOnly, formatDateTime } from "../utils/formatDate";
 import AdminProfile from "../components/AdminProfile";
+import { API_BASE_URL } from "../utils/apiConfig";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -33,8 +34,8 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [attendanceRes, studentsRes] = await Promise.all([
-          axios.get("http://localhost:5001/api/students/attendance"),
-          axios.get("http://localhost:5001/api/students")
+          axios.get(`${API_BASE_URL}/api/students/attendance`),
+          axios.get(`${API_BASE_URL}/api/students`)
         ]);
         setAttendance(attendanceRes.data);
         setStudents(studentsRes.data);
@@ -79,13 +80,13 @@ const Dashboard = () => {
       }
 
       // Manual entry goes to the main attendance log
-      const res = await axios.post("http://localhost:5001/api/attendance", {
+      const res = await axios.post(`${API_BASE_URL}/api/attendance`, {
         ...manualForm,
         recognizedAt: finalTimestamp
       });
       alert(res.data.message);
       setManualForm({ name: "", usn: "", course: "", recognizedAt: "" });
-      const response = await axios.get("http://localhost:5001/api/students/attendance");
+      const response = await axios.get(`${API_BASE_URL}/api/students/attendance`);
       setAttendance(response.data);
     } catch (err) {
       alert(err.response?.data?.message || "Failed to mark attendance");
@@ -106,7 +107,7 @@ const Dashboard = () => {
         filename = `Monthly_Report_${month}_${year}.xlsx`;
       }
 
-      const response = await axios.get(`http://localhost:5001/api/report/${endpoint}`, { 
+      const response = await axios.get(`${API_BASE_URL}/api/report/${endpoint}`, {
         responseType: "blob" 
       });
       
