@@ -21,6 +21,16 @@ app.use(cors({
   origin: ["http://localhost:5173", "http://127.0.0.1:5173"]
 }));
 app.use(express.json({ limit: "10mb" }));
+app.get("/", (_req, res) => {
+  res.json({
+    name: "Face Recognition Attendance API",
+    status: "ok",
+    health: "/health"
+  });
+});
+app.get("/health", (_req, res) => {
+  res.json({ status: "ok" });
+});
 app.use("/api", requireAuth);
 app.use("/api/students", studentRoutes);
 app.use("/api/attendance", attendanceRoutes);
