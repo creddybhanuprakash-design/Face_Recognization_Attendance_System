@@ -1,0 +1,30 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# JavaScript dependencies and build output
+**/node_modules/
+**/dist/
+npm-debug.log*
+
+# Python environments and generated files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Local logs and generated test output
+*.log
+client/playwright-report/
+client/test-results/
+
+# Local report and architecture preview artifacts
+*.rtf
+~$*.rtf
+/Face_Recognition_Architecture.png
+/architecture-map.svg
+/architecture-preview.html
+
+# Biometric data is local-only and must never be committed
+python_face_api/faces/
